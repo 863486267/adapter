@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>支付宝支付</title>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta name="MobileOptimized" content="280" />
+<meta name="apple-touch-fullscreen" content="YES" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0,  minimum-scale=1.0, maximum-scale=1.0" />
+<script
+	src="https://a.alipayobjects.com/g/h5-lib/alipayjsapi/3.0.6/alipayjsapi.min.js"></script>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+	function log(obj) {
+	/* 	if (obj.resultCode == "9000") {
+			$("#result").append('支付成功').append(" ").append("<br />");
+		} else if (obj.resultCode == "8000") {
+			$("#result").append('处理中').append(" ").append("<br />");
+		} else if (obj.resultCode == "4000") {
+			$("#result").append('支付失败').append(" ").append("<br />");
+		} else if (obj.resultCode == "6001") {
+			$("#result").append('取消交易').append(" ").append("<br />");
+		} else if (obj.resultCode == "6002") {
+			$("#result").append('网络连接异常').append(" ").append("<br />");
+		} else {
+			
+		} */
+		$("#result").append('交易结束').append(" ").append("<br />");
+	}
+	$(document).ready(function() {
+		// 页面载入完成后即唤起收银台
+		// 此处${tradeNO}为模板语言语法，实际调用样例类似为tradePpay("2018112222001451065435962967")
+		var tradeNO = /*[[${payInfo}]]*/null;
+		//		tradePay("${payInfo}");
+		tradePay(tradeNO);
+	});
+	function tradePay(tradeNO) {
+		AlipayJSBridge.call("tradePay", {
+			tradeNO : tradeNO
+		}, function(data) {
+			log(JSON.stringify(data));
+			if ("9000" == data.resultCode) {
+				log("支付成功");
+			}
+		});
+		/* ready(function() {
+			// 通过传入交易号唤起快捷调用方式(注意tradeNO大小写严格)
+			alert(1);
+		}); */
+	}
+</script>
+<body>
+	<p id="result"></p>
+</body>
+</head>
+</html>

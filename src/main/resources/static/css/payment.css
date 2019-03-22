@@ -1,0 +1,116 @@
+*{
+    margin:0;
+    padding: 0;
+}
+.payment_warp{
+    height: 100%;
+    width: 100%;
+    padding:0 .15rem;
+    box-sizing: border-box;
+}
+.head{
+    vertical-align: middle;
+    padding:.15rem 0;
+    border-bottom:1px solid #e7e7e7;
+    font-size: 0;
+}
+.head>img{
+    width: 1rem;
+    height: .35rem;
+    display: inline-block;
+}
+.payment_content{
+    text-align: center;
+    padding-top: .05rem;
+}
+.pay_logo{
+    font-size: 0;
+}
+.pay_logo>img{
+    width: 1rem;
+    height: .8rem;
+    display: inline-block;
+    margin-bottom: .08rem;
+}
+.pay_num{
+    color: red;
+    font-weight: 500;
+    font-size: .35rem;
+}
+.pay_text{
+    width: 3rem;
+    margin:auto;
+    text-align: center;
+    font-size: .14rem;
+}
+.pay_text>p{
+    text-align: left;
+    margin:.1rem;
+    font-weight: bold;
+}
+.pay_date{
+    margin-bottom: .3rem;
+    padding:.1rem;
+}
+.pay_date>p{
+    text-align: right;
+    font-size: .2rem;
+}
+.pay_bottom{
+    border-top: 1px solid #e7e7e7;
+    font-size: .14rem;
+    text-align: center;
+    padding:.2rem 0;
+}
+.pay_bottom>div{
+    vertical-align: middle;
+    display: inline-block;
+}
+.pay_bottom>div>img{
+    width: .32rem;
+    height: .32rem;
+}
+#text_tip{
+    display: none;
+}
+.pay_p{
+    text-align: center;
+    font-size: .1rem;
+    margin-left: .1rem;
+    display: inline-block;
+}
+.pay_img{
+    font-size: 0;
+}
+.pay_img>button{
+    padding: .07rem .3rem;
+    background: #00A2EA;
+    color: #fefefe;
+    outline: none;
+    border-radius: .05rem;
+    border: none;
+    font-size: .18rem;
+    display: block;
+    margin: auto;
+}
+.sp1{
+    color: red;
+    font-size: .2rem;
+}
+.p_text{
+    text-align: center !important;
+}
+#img2{
+    display: none;
+}
+.red{
+    color: red;
+    font-weight: bold;
+}
+.sp2{
+    width: .25rem;
+    display: inline-block;
+}
+canvas{
+    display: none;
+}

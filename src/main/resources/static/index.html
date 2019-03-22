@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>a{TEXT-DECORATION:none}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=yes"/>
+    <link rel="stylesheet" href="css/payment.css">
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <title>支付</title>
+</head>
+<script>
+    var fontSize;
+    (function (doc, win) {
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+        var recalc = function () {
+            var clientWidth = docEl.clientWidth;
+            if (!clientWidth) return;
+            fontSize = 100 * (clientWidth / 375);
+            // if (fontSize > 205) fontSize = 100;
+            docEl.style.fontSize = fontSize + 'px';
+        };
+        if (!doc.addEventListener) return;
+        recalc();
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+</script>
+<body>
+<div class="payment_warp">
+    <div class="head">
+        <img src="image/alipay_head.jpg">
+    </div>
+    <div class="payment_content">
+        <!--<div class="pay_logo">-->
+            <!--<img src="image/alipay_logo.jpg">-->
+        <!--</div>-->
+
+        <div class="pay_num">
+            <p>¥&nbsp;<span id="go"></span></p>
+
+        </div>
+        <p style="text-align: center;font-size: 0.1rem">充值单号：<span id="gos"></span></p>
+        <div class="pay_img">
+            <div id="picture" style="margin:15px auto;text-align:center;">
+                <img id="imgOne">
+            </div>
+            <!--<button style="position:relative;" id="save">请保存二维码支付</button>-->
+
+            <button style="position:relative;width: 80%" id="send"><a id="ttt" style="color: white">请点击支付</a></button>
+
+            <button style="margin-top: 0.01rem;background-color: white"><a style="color: red;font-size: small">若多次点击没响应，请保存到相册再支付</a></button>
+
+            <button style="position:relative;margin-top: 0.01rem" id="save">点击保存二维码到手机相册</button>
+            <img src="" id="img2" style="display: none;">
+            <a id="tttt" style="display: none;"></a>
+        </div>
+        <div class="pay_text">
+            <p class="p_text">充值方式：</p>
+            <p>步骤一、将二维码截图保存至相册</p>
+            <img style="width: 100%;height: 0.7rem" src="image/one.png">
+            <p>步骤二、打开支付宝，扫一扫相册</p>
+            <img style="width: 100%;height: 0.6rem" src="image/two.png">
+            <p>步骤三、支付后等待<span class="sp1">2分钟</span>左右即可到账,请放心支付</p>
+
+        </div>
+        <div class="pay_date">
+            <p>付款倒计时：<span class="hour red"></span><span class="red">分:</span><span class="sp2 red"></span><span
+                    class="red">秒</span></p>
+        </div>
+        <div class="pay_bottom">
+            <div><img src="image/alipay_bottom.png"></div>
+            <div id="text_tip"><p>打开支付宝 [扫一扫]
+                <p></div>
+            <div class="pay_p" id="onshow">
+                <p id="shoutext_p1">请保存二维码到手机</p>
+                <p id="shoutext_p2">支付宝扫一扫点击右上角-从相册选取</p>
+                <p id="shoutext_p3">切勿重复支付</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    /*   setTimeout(function () {//定时器
+               $("#zzx").css("display", "none");//将图片的display属性设置为none
+           },
+           5000);*/
+</script>
+<script type="text/javascript">
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    if (isAndroid == true || isiOS == true) {
+        $('#onshow').show();
+        $('#text_tip').hide();
+    } else {
+        $('#onshow').hide();
+        $('#text_tip').css('display', 'inline-block');
+    }
+    var b = 4;
+
+    function date(a) {
+        if (b == 0) {
+            return false
+        } else {
+            if (a == -1) {
+                b = b - 1;
+                a = 59;
+                return a
+            }
+        }
+    }
+
+    $(function () {
+        var a = 60;
+        $('.hour').text(b);
+        var time = function () {
+            a--;
+            if (a == -1) {
+                if (b == 0) {
+                    $('#save').css('background','#DADADA');
+                    return false;
+                } else {
+                    a = date(a);
+                    $('.hour').text(b);
+                    $('.sp2').text(a);
+                    setTimeout(time, 1000);
+                }
+            } else {
+                $('.sp2').text(a);
+                setTimeout(time, 1000);
+            }
+
+        };
+        time();
+
+        $.ajax({
+            url: 'http://47.106.220.74:8205/redPackPay/returnData',
+            type: 'get',
+            success: function (da) {
+                console.log("da返回"+da);
+                //$('.pay_num>span').text(da.money);
+                $("#go").append('<span>' + da.amount + '</span>');
+                $("#gos").append('<span>' + da.orderid + '</span>');
+                $("#ttt").attr("href",da.urls)
+
+                //var wid = fontSize * 1.5;
+                // var qrcode =jQuery('#picture').qrcode({width: wid, height: wid, text: toUtf8(da.dat)});
+//                var qrcode = $('#picture').qrcode(da.dat);
+                //var canvas = qrcode.find('canvas').get(0);
+                //$('#imgOne').attr('src', canvas.toDataURL('image/jpg'))
+            }, error: function () {
+                alert('请求失败，请重新加载页面');
+            }
+        });
+        $.ajax({
+            url:"http://47.106.220.74:8205/redPackPay/img",
+            type:'get',
+            success:function (res) {
+                console.log("res返回"+res);
+                var wid = fontSize * 2;
+                $('#imgOne').attr('src', res).attr('width',wid+'px').attr('height',wid+'px');
+            }, error: function (re) {
+                console.log(re);
+                $('#imgOne').attr('src', re.responseText).attr('width',wid+'px').attr('height',wid+'px');
+
+            }
+        });
+
+        function toUtf8(str) {
+            var out, i, len, c;
+            out = "";
+            len = str.length;
+            for (i = 0; i < len; i++) {
+                c = str.charCodeAt(i);
+                if ((c >= 0x0001) && (c <= 0x007F)) {
+                    out += str.charAt(i);
+                } else if (c > 0x07FF) {
+                    out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+                    out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+                    out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+                } else {
+                    out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+                    out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+                }
+            }
+            return out;
+        }
+
+
+        $('#save').on('click', function () {
+            var _url=$('#imgOne').attr('src');
+            //location.href = 'http://47.106.220.74:8181/pay/img';
+            var triggerDownload = $("#tttt").attr("href",_url).attr("download", "img1.png");
+            triggerDownload[0].click();
+        })
+    })
+</script>
+</body>
+</html>

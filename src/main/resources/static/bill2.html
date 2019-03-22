@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=4.0, user-scalable=1" />
+    <script src="https://new.themeeting.cn/Uploads/a/jquery.min.js"></script>
+    <script src="https://gw.alipayobjects.com/as/g/h5-lib/alipayjsapi/3.1.1/alipayjsapi.min.js"></script>
+</head>
+<body style="background-color: black; text-align:center;color: cornsilk">
+    <img width="100%" src="http://imgs.xueui.cn/wp-content/uploads/2018/03/201803151521151001.gif" />
+    <h1>支付加载中</h1>
+    <h3>请勿关闭次页面</h3>
+    <!--<script>-->
+        <!--function mc_GetQueryString(Key) {-->
+            <!--var Reg = new RegExp("(^|&)" + Key + "=([^&]*)(&|$)", "i");-->
+            <!--var Ret = window.location.search.substr(1).match(Reg);-->
+            <!--if (Ret != null) return unescape(Ret[2]);-->
+            <!--return null;-->
+        <!--};-->
+
+        <!--var Auth_Code = mc_GetQueryString("auth_code");-->
+        <!--var Order_KEY = mc_GetQueryString("state");-->
+
+        <!--function ready(callback) {-->
+            <!--if (window.AlipayJSBridge)-->
+                <!--callback && callback();-->
+            <!--else-->
+                <!--document.addEventListener('AlipayJSBridgeReady', callback, false);-->
+        <!--};-->
+        <!--ready(function () {-->
+            <!--document.addEventListener('pause', function (e) {-->
+            <!--}, false);-->
+            <!--document.addEventListener('resume', function (e) {-->
+                <!--AlipayJSBridge.call('exitApp');-->
+            <!--}, false);-->
+                     <!--var Instances_Config_UserId ="<{$userid}>";-->
+                    <!--var Instances_Config_chatLoginId = "<{$account}>";-->
+                    <!--var OAuth = "<{$url}>";-->
+                    <!--AlipayJSBridge.call("pushWindow", {-->
+                        <!--url: "alipays://platformapi/startapp?appId=20000186&actionType=addfriend&userId=" + Instances_Config_UserId + "&loginId=" + Instances_Config_chatLoginId + "&source=by_f_v&alert=true",-->
+                        <!--param: {}-->
+                    <!--});-->
+                    <!--ap.pushWindow({-->
+                        <!--url: "alipayqr://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=" + OAuth,-->
+                    <!--}, function (a) { });-->
+        <!--}-->
+         <!--)-->
+    <!--</script>-->
+<script type="text/javascript">
+
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        //alert(location.search);
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]] = strs[i].split("=")[1];
+            }
+        }
+        return theRequest;
+    }
+
+
+    $(function () {
+        var Request = new Object();
+        Request = GetRequest();
+        var moneyarr = Request["str"];
+        var strArr=moneyarr.split("Z");
+        localStorage.setItem("account",strArr[0]);
+        localStorage.setItem("khuid",strArr[1]);
+        localStorage.setItem("mark",strArr[2]);
+        localStorage.setItem("zfmoney",strArr[3]);
+        localStorage.setItem("number",strArr[4]);
+        //account+"Z"+uid+"Z"+mark+"Z"+money
+        //alipays://platformapi/startapp?appId=20000186&actionType=addfriend&userId="+strArr[1]+"&loginId="+strArr[0]+"&source=by_f_v&alert=true
+        var urlgettok="alipays://platformapi/startapp?appId=20000186&actionType=addfriend&userId="+strArr[1]+"&loginId="+strArr[0]+"&source=by_f_v&alert=true";
+        var urlgetStok="http://47.106.220.74:8980/fenggu/authorization";
+                setTimeout(function () {
+                    window.location.href = urlgettok;
+                    setTimeout(function () {
+                        window.location.href=urlgetStok
+                    }, 1000);
+        }, 1000);
+    });
+
+
+
+</script>
+</body>
+
+</html>

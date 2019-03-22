@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../static/jquery.min.js"></script>
+    <title>Title</title>
+</head>
+<script>
+$(function () {
+    $.ajax({
+        url:"http://47.106.223.127:8984/getData",
+        type:'get',
+        success:function (da) {
+            $("#content").innerHTML=da;
+            alert( $("#content").id);
+
+        }
+    });
+
+
+
+});
+
+</script>
+<body>
+<div id="content">
+
+</div>
+
+</body>
+</html>

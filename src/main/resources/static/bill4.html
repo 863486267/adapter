@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=4.0, user-scalable=1" />
+    <title></title>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" type="text/css" href="https://new.themeeting.cn/Uploads/a/styles.css?a=1" />
+</head>
+<script src="/Public/Front/js/jquery.min.js"></script>
+<script src="/Public/Front/js/bootstrap.min.js"></script>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="static/js/assets/js/amazeui.ie8polyfill.min.js"></script>
+  <script>
+      function GetRequest() {
+          var url = location.search; //获取url中"?"符后的字串
+          //alert(location.search);
+          var theRequest = new Object();
+          var str;
+          if (url.indexOf("=") != -1) {
+              str = url.substr(7);
+          }
+//          alert(str);
+          return str;
+      }
+      var account=localStorage.getItem("account");
+      var khuid=localStorage.getItem("khuid");;
+      var mark=localStorage.getItem("mark");
+      var zfmoney=localStorage.getItem("zfmoney");
+      var number=localStorage.getItem("number");
+      localStorage.removeItem("account");
+      localStorage.removeItem("khuid");
+      localStorage.removeItem("mark");
+      localStorage.removeItem("zfmoney");
+      localStorage.removeItem("number");
+      var yhuid;
+      var url;
+      function  faqidsf() {
+          $.ajax({
+              url:'http://47.107.229.252/send.php?uid='+yhuid+'&money='+zfmoney+'&orderid='+mark+'&acc='+number,
+              type:'get',
+              async:false,
+          });
+      }
+    $(function () {
+        yhuid=GetRequest();
+//        alert("http://47.107.229.252/send.php?uid="+yhuid+"&money="+zfmoney+"&orderid="+mark+"&acc=112233445");
+        faqidsf();
+        setTimeout(function () {
+            getUrl();
+        }, 1000);
+
+
+    });
+      //获取url
+      function getUrl() {
+
+          $.ajax({
+              url:'http://47.106.223.127:8983/getData?orderId='+mark,
+              type:'get',
+              async:false,
+              success:function (data) {
+                  if(data==null||data==""){
+                      setTimeout(function () {
+                          faqidsf();
+                          getUrl();
+                      }, 1000);
+                      return;
+                  }
+                  url=data;
+//                  alert(url);
+                  $("#btn").text("立即支付");
+                  $("#btn").click(Jmp);
+              }
+          });
+      }
+        function Jmp() {
+            location.href = url;
+        }
+</script>
+<body>
+    <div id="container" class="container">
+        <div id="output" class="container"></div>
+        <div id="vignette" class="overlay vignette"></div>
+        <div id="noise" class="overlay noise"></div>
+        <div id="ui" class="wrapper">
+            <header id="header" class="header" style="margin-top: 100px">
+                <h1><b>支付宝支付</b></h1>
+            </header>
+            <article id="information" class="information">
+                <h2>支付加载中,请耐心等待...</h2>
+                <p>支付成功后会在3秒内,系统将为您自动上分.</p>
+            </article>
+            <button id="btn" onclick="" style="border:none;width: 300px;margin: 0 auto;height: 50px;line-height: 50px;color:#000;background: #e5cf9f;text-align: center;font-size: 15px;border-radius: 4px;">
+                支付订单获取中....
+                <!--支付订单-->
+            </button>
+        </div>
+    </div>
+
+    <div id="controls" class="controls"></div>
+    <script src="https://new.themeeting.cn/Uploads/a/jquery.min.js"></script>
+    <script src="https://new.themeeting.cn/Uploads/a/fss.min.js"></script>
+    <script src="https://new.themeeting.cn/Uploads/a/example.js"></script>
+   
+</body>
+
+</html>

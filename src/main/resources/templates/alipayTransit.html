@@ -1,0 +1,13 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script th:inline="javascript">
+	//传递的参数
+	window.onload = function() {
+		var pGateWayReq = /*[[${pGateWayReq}]]*/null;
+		window.location.href= pGateWayReq;
+	}
+</script>
+</head>
+</html>

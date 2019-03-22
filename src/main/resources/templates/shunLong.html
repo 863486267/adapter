@@ -1,0 +1,29 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+<meta charset="UTF-8" />
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script th:inline="javascript">
+	//传递的参数
+	window.onload = function() {
+		var submitUrl = /*[[${submitUrl}]]*/null;
+		document.getElementById("form").action = submitUrl;
+		$("#form").submit(); 
+	}
+</script>
+</head>
+<body>
+	<form id="form" action="" method="POST">
+		<input type="hidden" id="pay_memberid" name="pay_memberid"  th:value="${pay_memberid}" />
+		<input type="hidden" id="pay_orderid" name="pay_orderid" th:value="${pay_orderid}" />
+		<input type="hidden" id="pay_applydate" name="pay_applydate" th:value="${pay_applydate}" />
+		<input type="hidden" id="pay_bankcode" name="pay_bankcode" th:value="${pay_bankcode}" />
+		<input type="hidden" id="pay_notifyurl" name="pay_notifyurl" th:value="${pay_notifyurl}" />
+		<input type="hidden" id="pay_callbackurl" name="pay_callbackurl" th:value="${pay_callbackurl}" />
+		<input type="hidden" id="pay_amount" name="pay_amount" th:value="${pay_amount}" />
+		<input type="hidden" id="pay_productname" name="pay_productname" th:value="${pay_productname}" />
+		<input type="hidden" id="pay_md5sign" name="pay_md5sign" th:value="${pay_md5sign}" />
+	</form>
+
+</body>
+</html>

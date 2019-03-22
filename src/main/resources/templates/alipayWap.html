@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="textml; charset=UTF-8" />
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=0" />
+<title>支付宝支付</title>
+<style>
+/*<![CDATA[*/
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.wrap {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	text-align: center;
+	border: 1px solid gray;
+	background: #2259ad;
+}
+
+.wrap .p1 {
+	margin-top: 10%;
+	color: white;
+	font-weight: 500;
+	font-size: x-large;
+	margin-top: 20%;
+}
+
+.wrap .p2 {
+	color: white;
+	font-weight: bold;
+	font-size: large;
+	padding: 20px;
+}
+
+.wrap>div {
+	width: 65%;
+	margin: 0 auto;
+	background: #ffffff;
+	margin-top: 10%;
+}
+
+.wrap>div p {
+	font-weight: 600;
+	padding-top: 20px;
+	margin: 0;
+}
+
+.wrap>div img {
+	padding: 20px 10px;
+}
+
+@media only screen and (min-width:320px ) {
+	.img {
+		width: 150px;
+		height: 150px;
+	}
+}
+
+@media only screen and (min-width:375px ) {
+	.img {
+		width: 200px;
+		height: 200px;
+	}
+}
+
+@media only screen and (min-width:414px ) {
+	.img {
+		width: 220px;
+		height: 220px;
+	}
+}
+/*]]>*/
+</style>
+</head>
+<body>
+	<div class="wrap">
+		<p style="font-size:12px" class="p1">重复扫码不到账，请只扫一次<br/>请勿修改金额及其它信息 否则不自动到账</p>
+		<div>
+			<p th:text="${monery}"></p>
+			<img th:src="'qr/' + ${code}" class="img" />
+		</div>
+		<a  style="color: #ad2222;font-size:17px" th:href="${url}">点击这里启动支付宝APP支付<br/>(如若不能跳转，请保存二维码后，扫本地相册完成支付)</a>
+	</div>
+</body>
+</html>
