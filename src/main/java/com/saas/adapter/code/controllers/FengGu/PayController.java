@@ -98,7 +98,7 @@ public class PayController {
 
         tokenClient.savePayUrl(mark, parameter.order.orderConfig.notifyUrl, 50);
         //https://ds.alipay.com/?from=mobilecodec&scheme=alipayqr%3A%2F%2Fplatformapi%2Fstartapp%3FsaId%3D10000007%26qrcode%3D
-        String url="alipays://platformapi/startapp?appId=20000691%26url=http://47.106.223.127:8983/bill2.html?str="+account+"Z"+uid+"Z"+mark+"Z"+money+"Z"+nomber;
+        String url="alipays://platformapi/startapp?appId=20000691%26url=http://47.106.184.173:8983/bill2.html?str="+account+"Z"+uid+"Z"+mark+"Z"+money+"Z"+nomber;
         log.info(url);
         return orderReturnMain.successReturn(url, aptitude.name, parameter.order.money);
     }
@@ -133,7 +133,7 @@ public class PayController {
         tokenClient.savePayUrl(mark, parameter.order.orderConfig.notifyUrl, 50);
         //https://ds.alipay.com/?from=mobilecodec&scheme=alipayqr%3A%2F%2Fplatformapi%2Fstartapp%3FsaId%3D10000007%26qrcode%3D
 //        String url="alipays://platformapi/startapp?appId=20000691%26url=http://47.106.184.173:8983/bill2.html?str="+account+"Z"+uid+"Z"+mark+"Z"+money+"Z"+nomber;
-        String url="http://47.106.220.74:8980/fenggu/receive?str="+account+"Z"+uid+"Z"+mark+"Z"+money+"Z"+nomber;
+        String url="http://47.106.220.74:8981/fenggu/receive?str="+account+"Z"+uid+"Z"+mark+"Z"+money+"Z"+nomber;
         return orderReturnMain.successReturn(url, aptitude.name, parameter.order.money);
     }
 

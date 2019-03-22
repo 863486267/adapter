@@ -100,6 +100,61 @@ public class YouJiaNewController {
         return orderReturnMain.successReturn(url, "充值金额", parameter.order.money);
     }
 
+    @PostMapping("/paywechat")
+    public OrderReturn paywechat(@RequestBody Parameter parameter) throws Exception {
+
+        String mchId = "20000075";
+        String appId = "655179f489494bd2a4360bc508281d1b";
+        String productId = "8028";
+        String mchOrderNo = parameter.order.no;
+        String currency = "cny";
+        String amount = parameter.order.money;
+        String returnUrl = "http://47.106.223.127:8983/youjianew/notify";
+        String notifyUrl = "http://47.106.223.127:8983/youjianew/notify";
+        String subject = "付款";
+        String body = "fukuan";
+
+
+        String s = "amount=" + amount + "&appId=" + appId + "&body=" + body + "&currency=" + currency + "&mchId=" + mchId + "&mchOrderNo=" + mchOrderNo + "&notifyUrl=" + notifyUrl + "&productId=" + productId + "&returnUrl=" + returnUrl + "&subject=" + subject + "&key=UK3VCVFQKGORRIA5FEAEZMOKBFEOA9XGEQ7SY1GICZWQCJEJEQ3UOO7CPZQ2RED52JLR3DUS71OERSXWEFWWG5QCXYJVTOGG8FG5GS6DUO9IZPXCZ1KPK0QRKXBC6KIZ";
+
+        log.info(s);
+        String sign = md5(s).toUpperCase();
+        log.info(sign);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("mchId", mchId);
+        map.add("appId", appId);
+        map.add("productId", productId);
+        map.add("mchOrderNo", mchOrderNo);
+        map.add("currency", currency);
+        map.add("amount", amount);
+        map.add("returnUrl", returnUrl);
+        map.add("notifyUrl", notifyUrl);
+        map.add("subject", subject);
+        map.add("body", body);
+        map.add("sign", sign);
+
+
+        HttpEntity<MultiValueMap> entity = new HttpEntity<>(map, headers);
+        ResponseEntity response = template.exchange("https://pay.weechang.xyz/api/pay/create_order", HttpMethod.POST, entity, String.class);
+
+        log.info(String.valueOf(response));
+        String url = String.valueOf(response);
+        log.info(url);
+        if (!(url.contains("https"))){
+            return null;
+        }
+        url=url.substring(url.lastIndexOf("https"),url.lastIndexOf("}")-2);
+        url=url.substring(0,url.indexOf("\""));
+        log.info("地址："+url);
+        tokenClient.savePayUrl(parameter.order.no, parameter.order.orderConfig.notifyUrl, 50);
+
+        return orderReturnMain.successReturn(url, "充值金额", parameter.order.money);
+    }
+
     @PostMapping("/notify")
     public String dd(YouJiaNewEntity entity){
          String income=entity.getIncome();
