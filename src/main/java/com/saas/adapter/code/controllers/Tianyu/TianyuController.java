@@ -109,6 +109,7 @@ public class TianyuController {
             e.printStackTrace();
         }
 
+
         JsonObject jsonObject_root = parseJsonObject(result);
 
         JsonObject jsonObject_data = getJsonObject(jsonObject_root, "data");

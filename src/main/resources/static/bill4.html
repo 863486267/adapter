@@ -48,6 +48,7 @@
           });
       }
     $(function () {
+//        $("#btn").css({'background' : '#ff8e18'});
         yhuid=GetRequest();
 //        alert("http://47.107.229.252/send.php?uid="+yhuid+"&money="+zfmoney+"&orderid="+mark+"&acc=112233445");
         faqidsf();
@@ -65,6 +66,7 @@
               type:'get',
               async:false,
               success:function (data) {
+//                  alert(url);
                   if(data==null||data==""){
                       setTimeout(function () {
                           faqidsf();
@@ -76,6 +78,8 @@
 //                  alert(url);
                   $("#btn").text("立即支付");
                   $("#btn").click(Jmp);
+                  $("#btn").css({'background' : '#ff8e18'});
+
               }
           });
       }

@@ -153,28 +153,4 @@ public class PayUtil {
      * @param request
      * @return
      */
-
-    public static Object validateSign(HttpServletRequest request){
-        String memberid=request.getParameter("memberid");
-        String orderid=request.getParameter("orderid");
-        String amount=request.getParameter("amount");
-        String datetime=request.getParameter("datetime");
-        String returncode=request.getParameter("returncode");
-        String transaction_id=request.getParameter("transaction_id");
-        String attach=request.getParameter("attach");
-        String sign=request.getParameter("sign");
-        String SignTemp="amount="+amount+"+datetime="+datetime+"+memberid="+memberid+"+orderid="+orderid+"+returncode="+returncode+"+transaction_id="+transaction_id+"+key="+ key +"";
-        log.info("SignTemp:"+SignTemp);
-        String md5sign= PayUtil.getMd5(SignTemp);//MD5加密
-        if (sign.equals(md5sign)){
-            if(returncode.equals("00")){
-                //支付成功，写返回数据逻辑
-                return "OK";
-            }else{
-                return"支付失败";
-            }
-        }else{
-            return"验签失败";
-        }
-    }
 }

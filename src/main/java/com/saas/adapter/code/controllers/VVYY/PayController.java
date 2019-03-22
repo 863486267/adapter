@@ -1,5 +1,6 @@
 package com.saas.adapter.code.controllers.VVYY;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.saas.adapter.clients.TokenClient;
 import com.saas.adapter.po.CallbackResult;
@@ -42,7 +43,6 @@ public class PayController {
     @Autowired
     public SaasNotifyParams saasNotifyParams;
 
-    Map htmlTextMap = new HashMap();
 
     /**
      * 下单
@@ -54,10 +54,11 @@ public class PayController {
         String pay_memberid = PayUtil.pay_memberid;
         String pay_applydate =  DateUtil.generateTime("yyyy-MM-dd HH:mm:ss");
         String pay_bankcode =  "903";
-        String pay_notifyurl =  "http://47.106.223.127:8984/vvyy/notify";
-        String pay_callbackurl =  "http://47.106.223.127:8984/vvyy/notify";
+        String pay_notifyurl =  "http://47.106.223.127:8983/vvyy/notify";
+        String pay_callbackurl =  "http://47.106.223.127:8983/vvyy/notify";
         String pay_amount = MD5.changeF2Y(parameter.order.money);
         String pay_orderid=parameter.order.no;
+        log.info("SAAS:"+pay_orderid);
         Map<String, Object> map = new HashMap<>();
             map.put("pay_memberid",pay_memberid);
             map.put("pay_orderid",parameter.order.no);
@@ -67,36 +68,55 @@ public class PayController {
             map.put("pay_callbackurl", pay_callbackurl);
             map.put("pay_amount", pay_amount);
             map.put("pay_md5sign", PayUtil.getSign(pay_amount,pay_bankcode,pay_callbackurl,pay_memberid,pay_notifyurl,pay_orderid,pay_applydate));
-            map.put("pay_productname","100元话费充值");
+            map.put("pay_productname","充值");
         String postResult = PayUtil.executePost(PayUtil.pay_url, map);
-        String htmlText=String.valueOf(postResult);
-        htmlTextMap.put(pay_orderid,htmlText);
-        log.info(htmlText);
+        JSONObject json=JSONObject.parseObject(postResult);
+        log.info(json.toJSONString());
         tokenClient.savePayUrl(pay_orderid, parameter.order.orderConfig.notifyUrl, 50);
-        String url="http://47.106.223.127:8984/vvyy/payment?orderid="+pay_orderid;
-        return orderReturnMain.successReturn(url, "充值金额", parameter.order.money);
-    }
-
-    /**
-     * 传给sasa的支付地址
-     * @param orderid
-     * @return
-     */
-    @GetMapping("/payment")
-    public String payment(String orderid){
-        String htmlText=htmlTextMap.get(orderid).toString();
-        htmlTextMap.remove(orderid);
-        return htmlText;
+        if(String.valueOf(json.get("status")).equals("success")){
+            String url= String.valueOf(json.get("url"));
+            return orderReturnMain.successReturn(url, "充值金额", parameter.order.money);
+        }
+        return orderReturnMain.failReturn("下单失败！");
     }
 
     /**
      * 回调地址
-     * @param request
      * @return
      */
     @PostMapping("/notify")
-    public Object payNotify(HttpServletRequest request){
-        return PayUtil.validateSign(request);
+    public String payNotify(VVYY entity){
+        String memberid=entity.getMemberid();
+        String orderid=entity.getOrderid();
+        String amount=entity.getAmount();
+        String datetime=entity.getDatetime();
+        String returncode=entity.getReturncode();
+        String transaction_id=entity.getTransaction_id();
+        String attach=entity.getAttach();
+        String sign=entity.getSign();
+
+        String SignTemp="amount="+amount+"&datetime="+datetime+"&memberid="+memberid+"&orderid="+orderid+"&returncode="+returncode+"&transaction_id="+transaction_id+"&key="+ PayUtil.key +"";
+        log.info("SignTemp:"+SignTemp);
+        log.info("回调订单号:",orderid);
+        String notifyUrl = tokenClient.getPayParams(orderid);
+        log.info("回调地址2"+notifyUrl);
+        if(!(notifyUrl==null)) {
+            template.postForObject(notifyUrl, entity, String.class);
+        }
+        String md5sign= PayUtil.getMd5(SignTemp).toUpperCase();//MD5加密
+        if (sign.equals(md5sign)){
+            if(returncode.equals("00")){
+                //支付成功，写返回数据逻辑
+                log.info("OK");
+                return "OK";
+            }else{
+                log.info("支付失败");
+                return"支付失败";
+            }
+        }else{
+            log.info("验签失败");
+            return"验签失败";
+        }
     }
 
 
@@ -120,11 +140,14 @@ public class PayController {
             money=money.substring(0,money.indexOf("."));
         }
         money= MD5.changeF2Y(money);
+        if(money.contains(".")){
+            money=money.substring(0,money.indexOf("."));
+        }
         Map<?, ?> paramMap = (Map<?, ?>) map.get("param");
         String body = String.valueOf(paramMap.get("body"));
         Map<?, ?> mapbody = gson.fromJson(body, Map.class);
-        String m= String.valueOf(mapbody.get("total_fee"));
-        String o= String.valueOf(mapbody.get("pay_memberid"));
+        String m= String.valueOf(mapbody.get("amount"));
+        String o= String.valueOf(mapbody.get("orderid"));
         if(m.contains(".")){
             m=m.substring(0,m.indexOf("."));
         }
