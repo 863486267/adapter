@@ -5,6 +5,6 @@ package com.saas.adapter.tools.test;
  **/
 public class TestController {
     public static void main(String[] args) {
-        System.out.println("测试方法！");
+        System.out.println("屁股！");
     }
 }
